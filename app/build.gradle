@@ -24,8 +24,8 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:design:27.1.1'
     //firebase DB, Auth 추가(버전 같아야함)
-    'com.google.firebase:firebase-database:9.0.0'
-    'com.google.firebase:firebase-auth:9.0.0'
+    implementation 'com.google.firebase:firebase-database:9.0.0'
+    implementation 'com.google.firebase:firebase-auth:9.0.0'
 
 }
 //firebase 플러그인 추가
