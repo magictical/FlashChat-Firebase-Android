@@ -1,8 +1,10 @@
 package com.magictical.flashchatnewfirebase;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -10,6 +12,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 
@@ -101,6 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
             focusView.requestFocus();
         } else {
             // TODO: Call create FirebaseUser() here
+            createFirebseUser();
 
         }
     }
@@ -112,11 +118,31 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean isPasswordValid(String password) {
         //TODO: Add own logic to check for a valid password (minimum 6 characters)
-        return true;
+        //mConfirmPasswordView에서 txt가져와서 인스턴스에 저장
+        String confirmPassword = mConfirmPasswordView.getText().toString();
+        //저장된 인스턴스와 password를 비교하고 password가 6자 이상이면 true반환
+        return confirmPassword.equals(password) && password.length()> 5;
     }
 
     // TODO: Create a Firebase user
+    private void createFirebseUser() {
+        //user email, password값 가져와서 변수에 저장
+        String userEmail = mEmailView.getText().toString();
+        String userPassword = mPasswordView.getText().toString();
 
+        //create FirbaseUser
+        mAuth.createUserWithEmailAndPassword(userEmail, userPassword)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                Log.d("FlashChat", "createUser onComplete: " + task.isSuccessful());
+
+                if(!task.isSuccessful()) {
+                    Log.d("FlashChat", "user creation failed!");
+                }
+            }
+        });
+    }
 
     // TODO: Save the display name to Shared Preferences
 
