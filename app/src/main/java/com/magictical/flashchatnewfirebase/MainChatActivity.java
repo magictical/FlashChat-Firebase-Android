@@ -70,10 +70,14 @@ public class MainChatActivity extends AppCompatActivity {
 
 
     private void sendMessage() {
-
-        // TODO: Grab the text the user typed in and push the message to Firebase
         Log.d("FlashChat", "sendMessage()has run");
-
+        // TODO: Grab the text the user typed in and push the message to Firebase
+        String input = mInputText.getText().toString();
+        if(!input.equals("")) {
+            InstanceMessage chat = new InstanceMessage(input, mDisplayName);
+            mDatabaseReference.child("messages").push().setValue(chat);
+            mInputText.setText("");
+        }
     }
 
     // TODO: Override the onStart() lifecycle method. Setup the adapter here.
