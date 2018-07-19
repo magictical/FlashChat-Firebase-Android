@@ -1,6 +1,9 @@
 package com.magictical.flashchatnewfirebase;
 
 import android.app.Activity;
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -44,8 +47,9 @@ public class ChatListAdapter extends BaseAdapter {
         return 0;
     }
 
+    //change generic to InstaceMessage object
     @Override
-    public Object getItem(int position) {
+    public InstanceMessage getItem(int position) {
         return null;
     }
 
@@ -56,7 +60,27 @@ public class ChatListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
-    }
 
+        //convertView : listItem
+        if(convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) mActivity.getSystemService((Context.LAYOUT_INFLATER_SERVICE));
+            convertView = inflater.inflate(R.layout.chat_msg_row, parent, false);
+            final VIewHolder holder = new VIewHolder();
+            holder.authorName = (TextView) convertView.findViewById(R.id.author);
+            holder.body = (TextView) convertView.findViewById(R.id.chat_message);
+            holder.params = (LinearLayout.LayoutParams) holder.authorName.getLayoutParams();
+            convertView.setTag(holder);
+        }
+
+        final InstanceMessage message = getItem(position);
+        final VIewHolder holder = (VIewHolder) convertView.getTag();
+
+        String Author = message.getAuthor();
+        holder.authorName.setText(Author);
+
+        String msg = message.getMessage();
+        holder.body.setText(msg);
+
+        return convertView;
+    }
 }
