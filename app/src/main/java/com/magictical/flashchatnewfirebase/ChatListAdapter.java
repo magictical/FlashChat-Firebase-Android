@@ -121,6 +121,7 @@ public class ChatListAdapter extends BaseAdapter {
 
         String msg = message.getMessage();
         holder.body.setText(msg);
+        Log.d("FlashChat", "getview is here");
 
         return convertView;
     }
