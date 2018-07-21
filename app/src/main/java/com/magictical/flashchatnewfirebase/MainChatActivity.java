@@ -1,6 +1,7 @@
 package com.magictical.flashchatnewfirebase;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -12,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -63,11 +66,21 @@ public class MainChatActivity extends AppCompatActivity {
 
     // TODO: Retrieve the display name from the Shared Preferences
     private void setupDisplayName() {
-        SharedPreferences preferences = getSharedPreferences(RegisterActivity.CHAT_PREFS, MODE_PRIVATE);
-        mDisplayName = preferences.getString(RegisterActivity.DISPLAY_NAME_KEY, null);
-        if (mDisplayName == null) {
-            mDisplayName = "Anonymous";
-        }
+//        SharedPreferences preferences = getSharedPreferences(RegisterActivity.CHAT_PREFS, MODE_PRIVATE);
+//        mDisplayName = preferences.getString(RegisterActivity.DISPLAY_NAME_KEY, null);
+//        if (mDisplayName == null) {
+//            mDisplayName = "Anonymous";
+//        }
+
+        //use Firebase  userInfo
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        mDisplayName = user.getDisplayName();
+        // Name, email address, and profile photo Url
+        String email = user.getEmail();
+        Log.d("FlashChat", "setupDisplayName() user name is " + mDisplayName);
+        Log.d("FlashChat", "user email is " + email);
+
+
     }
 
 
@@ -77,6 +90,7 @@ public class MainChatActivity extends AppCompatActivity {
         String input = mInputText.getText().toString();
         if(!input.equals("")) {
             InstanceMessage chat = new InstanceMessage(input, mDisplayName);
+            Log.d("check name", "Display name is " + mDisplayName);
             mDatabaseReference.child("messages").push().setValue(chat);
             mInputText.setText("");
         }
